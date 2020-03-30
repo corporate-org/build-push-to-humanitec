@@ -2250,7 +2250,7 @@ const cp = __webpack_require__(129);
  */
 function login(username, password, server) {
   try {
-    cp.execSync(`docker login -u ${username} --password-stdin ${registry} ${server}`, {
+    cp.execSync(`docker login -u ${username} --password-stdin ${server}`, {
       input: password,
     });
   } catch (err) {
