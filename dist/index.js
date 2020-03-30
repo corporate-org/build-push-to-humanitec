@@ -2237,10 +2237,19 @@ module.exports = require("url");
 
 /***/ }),
 
+/***/ 952:
+/***/ (function(module) {
+
+module.exports = eval("require")("@actions/exec");
+
+
+/***/ }),
+
 /***/ 997:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const cp = __webpack_require__(129);
+const exec = __webpack_require__(952);
 
 /**
  * Authenticates with a remote docker registry.
@@ -2269,10 +2278,18 @@ function login(username, password, server) {
  * @param {string} server - The host to connect to to log in.
  * @return {string} - The container ID assuming a successful build. falsy otherwise.
  */
-function build(tag, dockefilePath) {
+async function build(tag, dockefilePath) {
+  await exec.exec('docker', ['build', '-t', tag, dockefilePath], {
+    stdout: (data) => {
+      process.stdout.write(data);
+    },
+    stderr: (data) => {
+      process.stderr.write(data);
+    },
+  });
+
   try {
-    cp.execSync(`docker build -t "${tag}" "${dockefilePath}"`);
-    return cp.execSync(`docker images -q "${tag}"`).trim();
+    return cp.execSync(`docker images -q "${tag}"`).toString().trim();
   } catch (err) {
     return false;
   }
