@@ -50,6 +50,7 @@ async function runAction() {
     return;
   }
 
+  console.log('Logging into Registry.');
   if (!docker.login(registryCreds.username, registryCreds.password, registryHost)) {
     core.setFailed('Unable to connect to the humanitec registry.');
     return;
