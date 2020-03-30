@@ -1004,7 +1004,6 @@ async function runAction() {
     return;
   }
 
-  console.log('Logging into Registry.');
   if (!docker.login(registryCreds.username, registryCreds.password, registryHost)) {
     core.setFailed('Unable to connect to the humanitec registry.');
     return;
@@ -1013,7 +1012,7 @@ async function runAction() {
   process.chdir(process.env.GITHUB_WORKSPACE);
 
   const localTag = `${orgId}/${moduleName}:${process.env.GITHUB_SHA}`;
-  const imageId = docker.build(localTag, dockerfile);
+  const imageId = await docker.build(localTag, dockerfile);
   if (!imageId) {
     core.setFailed('Unable build image from Dockerfile.');
     return;
@@ -1021,7 +1020,7 @@ async function runAction() {
 
   const remoteTag = `${registryHost}/${localTag}`;
   if (!docker.push(imageId, remoteTag)) {
-    core.setFailed('Unable build image from Dockerfile.');
+    core.setFailed('Unable to push image to registry');
     return;
   }
 
@@ -3430,14 +3429,7 @@ function login(username, password, server) {
  * @return {string} - The container ID assuming a successful build. falsy otherwise.
  */
 async function build(tag, dockefilePath) {
-  await exec.exec('docker', ['build', '-t', tag, dockefilePath], {
-    stdout: (data) => {
-      process.stdout.write(data);
-    },
-    stderr: (data) => {
-      process.stderr.write(data);
-    },
-  });
+  await exec.exec('docker', ['build', '-t', tag, dockefilePath]);
 
   try {
     return cp.execSync(`docker images -q "${tag}"`).toString().trim();
