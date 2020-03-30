@@ -12,9 +12,9 @@ inputs:
     required: false
     default: ''
   dockerfile:
-    description: 'Location of the Dockerfile. Defaults to Dockerfile in root of repository.'
+    description: 'Directory containing the Dockerfile. Defaults to the root of repository.'
     required: false
-    default: './Dockerfile'
+    default: '.'
   humanitec-registry:
     description: 'Allows the default humanitec registry to be overidden for testing.'
     required: false
