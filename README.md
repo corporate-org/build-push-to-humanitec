@@ -6,18 +6,16 @@ notifies the Humanitec platform that a new build is available.
 ## Inputs
 
 ### `humanitec-token`
-
 **Required** The API token provided by the platform. This should be stored as a GitHub Repository Secret and then passed
 to the action using a variable expansion. For example, if the token is store as a secret with name `HUMANITEC_TOKEN`,
 the following code should be used to pass it to the action:
 ```
-...SNIP...
 
     uses: humanitec/build-push-to-humanitec
       with:
-        humanitec-token: ${{ secret.HUMANITEC_TOKEN }}
+        humanitec-token: ${{ secrets.HUMANITEC_TOKEN }}
+        organization: awesome-company
 
-...SNIP...
 ```
 ### `organization`
 **Required** The name of the organization that the module will be built for.
@@ -27,7 +25,7 @@ _Optional_ The name you want to refer to the module to in the Humanitec Platform
 numbers and the "-" symbol. It cannot start or end with "-".
 
 ### `dockerfile`
-_Optional_ Location of the Dockerfile. Defaults to Dockerfile in root of repository.
+_Optional_ Directory containing the Dockerfile. Defaults to the root of repository.
 
 
 ## Outputs
@@ -41,6 +39,6 @@ _None._
 uses: humanitec/build-push-to-humanitec
   with:
     humanitec-token: ${{ secret.HUMANITEC_TOKEN }}
-    humanitec-token: awesome-company
+    organization: awesome-company
 
 ```
