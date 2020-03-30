@@ -9,7 +9,7 @@ const cp = require('child_process');
  */
 function login(username, password, server) {
   try {
-    cp.execSync(`docker login -u ${username} --password-stdin ${registry} ${server}`, {
+    cp.execSync(`docker login -u ${username} --password-stdin ${server}`, {
       input: password,
     });
   } catch (err) {
