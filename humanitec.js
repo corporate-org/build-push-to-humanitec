@@ -39,12 +39,13 @@ module.exports = function(token, orgId, apiHost) {
 
   /**
    * Notifies Humanitec that a build has completed
-   * @param {Payload} payload -
+   * @param {string} moduleName - The name of the module to be added to Huamnitec.
+   * @param {Payload} payload - Details about the module.
    * @return {Promise} - A promise which resolves to true if successful, false otherwise.
    */
-  function addNewBuild(payload) {
+  function addNewBuild(moduleName, payload) {
     return fetch(
-      `https://${apiHost}/orgs/${orgId}/registries/humanitec/creds`, {
+      `https://${apiHost}/orgs/${orgId}/modules/${moduleName}/builds`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

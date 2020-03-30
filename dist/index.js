@@ -106,7 +106,7 @@ async function runAction() {
   try {
     registryCreds = await humanitec.getRegistryCredentials();
   } catch (error) {
-    core.error('Unable to access Humanitec.');
+    core.error('Unable to fetch repository credentials.');
     core.error('Did you add the token to your Github Secrets? ' +
       'http:/docs.humanitec.com/connecting-your-ci#github-actions');
     core.setFailed('Unable to access Humanitec.');
@@ -146,9 +146,9 @@ async function runAction() {
   }
 
   try {
-    await humanitec.addNewBuild(payload);
+    await humanitec.addNewBuild(moduleName, payload);
   } catch (error) {
-    core.error('Unable to access Humanitec.');
+    core.error('Unable to notify Humanitec about build.');
     core.error('Did you add the token to your Github Secrets? ' +
       'http:/docs.humanitec.com/connecting-your-ci#github-actions');
     core.setFailed('Unable to access Humanitec.');
@@ -2177,12 +2177,13 @@ module.exports = function(token, orgId, apiHost) {
 
   /**
    * Notifies Humanitec that a build has completed
-   * @param {Payload} payload -
+   * @param {string} moduleName - The name of the module to be added to Huamnitec.
+   * @param {Payload} payload - Details about the module.
    * @return {Promise} - A promise which resolves to true if successful, false otherwise.
    */
-  function addNewBuild(payload) {
+  function addNewBuild(moduleName, payload) {
     return fetch(
-      `https://${apiHost}/orgs/${orgId}/registries/humanitec/creds`, {
+      `https://${apiHost}/orgs/${orgId}/modules/${moduleName}/builds`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

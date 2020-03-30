@@ -43,7 +43,7 @@ async function runAction() {
   try {
     registryCreds = await humanitec.getRegistryCredentials();
   } catch (error) {
-    core.error('Unable to access Humanitec.');
+    core.error('Unable to fetch repository credentials.');
     core.error('Did you add the token to your Github Secrets? ' +
       'http:/docs.humanitec.com/connecting-your-ci#github-actions');
     core.setFailed('Unable to access Humanitec.');
@@ -83,9 +83,9 @@ async function runAction() {
   }
 
   try {
-    await humanitec.addNewBuild(payload);
+    await humanitec.addNewBuild(moduleName, payload);
   } catch (error) {
-    core.error('Unable to access Humanitec.');
+    core.error('Unable to notify Humanitec about build.');
     core.error('Did you add the token to your Github Secrets? ' +
       'http:/docs.humanitec.com/connecting-your-ci#github-actions');
     core.setFailed('Unable to access Humanitec.');
