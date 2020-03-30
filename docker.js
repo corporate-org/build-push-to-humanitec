@@ -30,7 +30,7 @@ function login(username, password, server) {
 function build(tag, dockefilePath) {
   try {
     cp.execSync(`docker build -t "${tag}" "${dockefilePath}"`);
-    return cp.execSync(`docker images -q "${tag}"`);
+    return cp.execSync(`docker images -q "${tag}"`).trim();
   } catch (err) {
     return false;
   }
